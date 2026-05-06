@@ -114,6 +114,19 @@ async function writeSecretsFile(
   await writeFile(secretsPath, JSON.stringify(secrets, null, 2), 'utf-8')
 }
 
+function parseImportedSecrets(content: string): Record<string, string> {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(content)
+  } catch {
+    throw new Error('Selected file is not valid JSON')
+  }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error('Import file must contain a JSON object, not an array or primitive')
+  }
+  return parsed as Record<string, string>
+}
+
 export async function listSecrets(csprojPath: string): Promise<Record<string, string>> {
   return readSecretsFile(csprojPath)
 }
@@ -172,7 +185,7 @@ export async function importSecrets(
 
   const filePath = result.filePaths[0]
   const content = await readFile(filePath, 'utf-8')
-  const incoming = JSON.parse(content)
+  const incoming = parseImportedSecrets(content)
 
   const userSecretsId = await parseUserSecretsId(csprojPath)
   if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
@@ -204,7 +217,7 @@ export async function importSecretsOverwrite(
 
   const filePath = result.filePaths[0]
   const content = await readFile(filePath, 'utf-8')
-  const incoming = JSON.parse(content)
+  const incoming = parseImportedSecrets(content)
 
   const userSecretsId = await parseUserSecretsId(csprojPath)
   if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
