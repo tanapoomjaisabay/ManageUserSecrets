@@ -62,7 +62,8 @@ export async function getProjectInfo(csprojPath: string): Promise<ProjectInfo> {
 }
 
 export async function openProjectDialog(): Promise<ProjectInfo | null> {
-  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
   const result = await dialog.showOpenDialog(win, {
     title: 'Open .csproj Project',
     filters: [{ name: 'C# Project', extensions: ['csproj'] }],
@@ -159,7 +160,8 @@ export async function deleteSecret(
 export async function importSecrets(
   csprojPath: string
 ): Promise<{ merged: number; mode: string } | null> {
-  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
   const result = await dialog.showOpenDialog(win, {
     title: 'Import Secrets JSON',
     filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -190,7 +192,8 @@ export async function importSecrets(
 export async function importSecretsOverwrite(
   csprojPath: string
 ): Promise<{ merged: number; mode: string } | null> {
-  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
   const result = await dialog.showOpenDialog(win, {
     title: 'Import Secrets JSON (Overwrite)',
     filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -218,7 +221,8 @@ export async function importSecretsOverwrite(
 export async function exportSecrets(
   csprojPath: string
 ): Promise<{ filePath: string } | null> {
-  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
   const secrets = await readSecretsFile(csprojPath)
 
   const result = await dialog.showSaveDialog(win, {
