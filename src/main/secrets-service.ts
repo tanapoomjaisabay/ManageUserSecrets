@@ -62,8 +62,8 @@ export async function getProjectInfo(csprojPath: string): Promise<ProjectInfo> {
 }
 
 export async function openProjectDialog(): Promise<ProjectInfo | null> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window!, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const result = await dialog.showOpenDialog(win, {
     title: 'Open .csproj Project',
     filters: [{ name: 'C# Project', extensions: ['csproj'] }],
     properties: ['openFile']
@@ -159,8 +159,8 @@ export async function deleteSecret(
 export async function importSecrets(
   csprojPath: string
 ): Promise<{ merged: number; mode: string } | null> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window!, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const result = await dialog.showOpenDialog(win, {
     title: 'Import Secrets JSON',
     filters: [{ name: 'JSON', extensions: ['json'] }],
     properties: ['openFile']
@@ -190,8 +190,8 @@ export async function importSecrets(
 export async function importSecretsOverwrite(
   csprojPath: string
 ): Promise<{ merged: number; mode: string } | null> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window!, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const result = await dialog.showOpenDialog(win, {
     title: 'Import Secrets JSON (Overwrite)',
     filters: [{ name: 'JSON', extensions: ['json'] }],
     properties: ['openFile']
@@ -218,10 +218,10 @@ export async function importSecretsOverwrite(
 export async function exportSecrets(
   csprojPath: string
 ): Promise<{ filePath: string } | null> {
-  const window = BrowserWindow.getFocusedWindow()
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
   const secrets = await readSecretsFile(csprojPath)
 
-  const result = await dialog.showSaveDialog(window!, {
+  const result = await dialog.showSaveDialog(win, {
     title: 'Export Secrets',
     defaultPath: 'secrets.json',
     filters: [{ name: 'JSON', extensions: ['json'] }]
