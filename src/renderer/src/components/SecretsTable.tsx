@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Eye, EyeOff, Copy, Pencil, Trash2, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -31,6 +31,10 @@ interface SecretsTableProps {
 function MaskedValue({ value }: { value: string }): React.ReactElement {
   const [visible, setVisible] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    setVisible(false)
+  }, [value])
 
   const handleCopy = useCallback(async () => {
     try {

@@ -62,8 +62,9 @@ export async function getProjectInfo(csprojPath: string): Promise<ProjectInfo> {
 }
 
 export async function openProjectDialog(): Promise<ProjectInfo | null> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window!, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
+  const result = await dialog.showOpenDialog(win, {
     title: 'Open .csproj Project',
     filters: [{ name: 'C# Project', extensions: ['csproj'] }],
     properties: ['openFile']
@@ -76,11 +77,14 @@ export async function openProjectDialog(): Promise<ProjectInfo | null> {
 
 // --- CRUD Operations ---
 
-async function readSecretsFile(csprojPath: string): Promise<Record<string, string>> {
-  const userSecretsId = await parseUserSecretsId(csprojPath)
-  if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
+async function readSecretsFile(
+  csprojPath: string,
+  userSecretsId?: string
+): Promise<Record<string, string>> {
+  const id = userSecretsId ?? (await parseUserSecretsId(csprojPath))
+  if (!id) throw new Error('UserSecretsId not found in .csproj')
 
-  const secretsPath = resolveSecretsPath(userSecretsId)
+  const secretsPath = resolveSecretsPath(id)
   if (!existsSync(secretsPath)) return {}
 
   let content = await readFile(secretsPath, 'utf-8')
@@ -98,19 +102,33 @@ async function readSecretsFile(csprojPath: string): Promise<Record<string, strin
 
 async function writeSecretsFile(
   csprojPath: string,
-  secrets: Record<string, string>
+  secrets: Record<string, string>,
+  userSecretsId?: string
 ): Promise<void> {
-  const userSecretsId = await parseUserSecretsId(csprojPath)
-  if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
+  const id = userSecretsId ?? (await parseUserSecretsId(csprojPath))
+  if (!id) throw new Error('UserSecretsId not found in .csproj')
 
-  const secretsDir = resolveSecretsDir(userSecretsId)
-  const secretsPath = resolveSecretsPath(userSecretsId)
+  const secretsDir = resolveSecretsDir(id)
+  const secretsPath = resolveSecretsPath(id)
 
   if (!existsSync(secretsDir)) {
     await mkdir(secretsDir, { recursive: true })
   }
 
   await writeFile(secretsPath, JSON.stringify(secrets, null, 2), 'utf-8')
+}
+
+function parseImportedSecrets(content: string): Record<string, string> {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(content)
+  } catch {
+    throw new Error('Selected file is not valid JSON')
+  }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error('Import file must contain a JSON object, not an array or primitive')
+  }
+  return parsed as Record<string, string>
 }
 
 export async function listSecrets(csprojPath: string): Promise<Record<string, string>> {
@@ -130,9 +148,9 @@ export async function setSecret(
     await backupSecrets(secretsPath)
   }
 
-  const secrets = await readSecretsFile(csprojPath)
+  const secrets = await readSecretsFile(csprojPath, userSecretsId)
   secrets[key] = value
-  await writeSecretsFile(csprojPath, secrets)
+  await writeSecretsFile(csprojPath, secrets, userSecretsId)
   return { success: true }
 }
 
@@ -148,9 +166,9 @@ export async function deleteSecret(
     await backupSecrets(secretsPath)
   }
 
-  const secrets = await readSecretsFile(csprojPath)
+  const secrets = await readSecretsFile(csprojPath, userSecretsId)
   delete secrets[key]
-  await writeSecretsFile(csprojPath, secrets)
+  await writeSecretsFile(csprojPath, secrets, userSecretsId)
   return { success: true }
 }
 
@@ -159,8 +177,9 @@ export async function deleteSecret(
 export async function importSecrets(
   csprojPath: string
 ): Promise<{ merged: number; mode: string } | null> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window!, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
+  const result = await dialog.showOpenDialog(win, {
     title: 'Import Secrets JSON',
     filters: [{ name: 'JSON', extensions: ['json'] }],
     properties: ['openFile']
@@ -170,7 +189,7 @@ export async function importSecrets(
 
   const filePath = result.filePaths[0]
   const content = await readFile(filePath, 'utf-8')
-  const incoming = JSON.parse(content)
+  const incoming = parseImportedSecrets(content)
 
   const userSecretsId = await parseUserSecretsId(csprojPath)
   if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
@@ -180,9 +199,9 @@ export async function importSecrets(
     await backupSecrets(secretsPath)
   }
 
-  const existing = await readSecretsFile(csprojPath)
+  const existing = await readSecretsFile(csprojPath, userSecretsId)
   const merged = { ...existing, ...incoming }
-  await writeSecretsFile(csprojPath, merged)
+  await writeSecretsFile(csprojPath, merged, userSecretsId)
 
   return { merged: Object.keys(incoming).length, mode: 'merge' }
 }
@@ -190,8 +209,9 @@ export async function importSecrets(
 export async function importSecretsOverwrite(
   csprojPath: string
 ): Promise<{ merged: number; mode: string } | null> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window!, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
+  const result = await dialog.showOpenDialog(win, {
     title: 'Import Secrets JSON (Overwrite)',
     filters: [{ name: 'JSON', extensions: ['json'] }],
     properties: ['openFile']
@@ -201,7 +221,7 @@ export async function importSecretsOverwrite(
 
   const filePath = result.filePaths[0]
   const content = await readFile(filePath, 'utf-8')
-  const incoming = JSON.parse(content)
+  const incoming = parseImportedSecrets(content)
 
   const userSecretsId = await parseUserSecretsId(csprojPath)
   if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
@@ -211,17 +231,18 @@ export async function importSecretsOverwrite(
     await backupSecrets(secretsPath)
   }
 
-  await writeSecretsFile(csprojPath, incoming)
+  await writeSecretsFile(csprojPath, incoming, userSecretsId)
   return { merged: Object.keys(incoming).length, mode: 'overwrite' }
 }
 
 export async function exportSecrets(
   csprojPath: string
 ): Promise<{ filePath: string } | null> {
-  const window = BrowserWindow.getFocusedWindow()
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
+  if (!win) return null
   const secrets = await readSecretsFile(csprojPath)
 
-  const result = await dialog.showSaveDialog(window!, {
+  const result = await dialog.showSaveDialog(win, {
     title: 'Export Secrets',
     defaultPath: 'secrets.json',
     filters: [{ name: 'JSON', extensions: ['json'] }]
@@ -244,7 +265,7 @@ export async function initUserSecrets(
       ['user-secrets', 'init', '--project', csprojPath],
       (error, _stdout, stderr) => {
         if (error) {
-          if (error.message.includes('ENOENT')) {
+          if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
             reject(
               new Error(
                 'dotnet SDK not found. Please install .NET SDK to initialize user secrets.'
