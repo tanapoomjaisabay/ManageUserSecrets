@@ -77,11 +77,14 @@ export async function openProjectDialog(): Promise<ProjectInfo | null> {
 
 // --- CRUD Operations ---
 
-async function readSecretsFile(csprojPath: string): Promise<Record<string, string>> {
-  const userSecretsId = await parseUserSecretsId(csprojPath)
-  if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
+async function readSecretsFile(
+  csprojPath: string,
+  userSecretsId?: string
+): Promise<Record<string, string>> {
+  const id = userSecretsId ?? (await parseUserSecretsId(csprojPath))
+  if (!id) throw new Error('UserSecretsId not found in .csproj')
 
-  const secretsPath = resolveSecretsPath(userSecretsId)
+  const secretsPath = resolveSecretsPath(id)
   if (!existsSync(secretsPath)) return {}
 
   let content = await readFile(secretsPath, 'utf-8')
@@ -99,13 +102,14 @@ async function readSecretsFile(csprojPath: string): Promise<Record<string, strin
 
 async function writeSecretsFile(
   csprojPath: string,
-  secrets: Record<string, string>
+  secrets: Record<string, string>,
+  userSecretsId?: string
 ): Promise<void> {
-  const userSecretsId = await parseUserSecretsId(csprojPath)
-  if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
+  const id = userSecretsId ?? (await parseUserSecretsId(csprojPath))
+  if (!id) throw new Error('UserSecretsId not found in .csproj')
 
-  const secretsDir = resolveSecretsDir(userSecretsId)
-  const secretsPath = resolveSecretsPath(userSecretsId)
+  const secretsDir = resolveSecretsDir(id)
+  const secretsPath = resolveSecretsPath(id)
 
   if (!existsSync(secretsDir)) {
     await mkdir(secretsDir, { recursive: true })
@@ -144,9 +148,9 @@ export async function setSecret(
     await backupSecrets(secretsPath)
   }
 
-  const secrets = await readSecretsFile(csprojPath)
+  const secrets = await readSecretsFile(csprojPath, userSecretsId)
   secrets[key] = value
-  await writeSecretsFile(csprojPath, secrets)
+  await writeSecretsFile(csprojPath, secrets, userSecretsId)
   return { success: true }
 }
 
@@ -162,9 +166,9 @@ export async function deleteSecret(
     await backupSecrets(secretsPath)
   }
 
-  const secrets = await readSecretsFile(csprojPath)
+  const secrets = await readSecretsFile(csprojPath, userSecretsId)
   delete secrets[key]
-  await writeSecretsFile(csprojPath, secrets)
+  await writeSecretsFile(csprojPath, secrets, userSecretsId)
   return { success: true }
 }
 
@@ -195,9 +199,9 @@ export async function importSecrets(
     await backupSecrets(secretsPath)
   }
 
-  const existing = await readSecretsFile(csprojPath)
+  const existing = await readSecretsFile(csprojPath, userSecretsId)
   const merged = { ...existing, ...incoming }
-  await writeSecretsFile(csprojPath, merged)
+  await writeSecretsFile(csprojPath, merged, userSecretsId)
 
   return { merged: Object.keys(incoming).length, mode: 'merge' }
 }
@@ -227,7 +231,7 @@ export async function importSecretsOverwrite(
     await backupSecrets(secretsPath)
   }
 
-  await writeSecretsFile(csprojPath, incoming)
+  await writeSecretsFile(csprojPath, incoming, userSecretsId)
   return { merged: Object.keys(incoming).length, mode: 'overwrite' }
 }
 
