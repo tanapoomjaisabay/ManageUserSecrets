@@ -61,3 +61,40 @@ To build the application for your operating system, run the respective command:
 - Linux: `pnpm run build:linux`
 
 The packaged application will be available in the `dist` folder.
+
+## Useful CLI Commands
+
+### Starting the Application
+If you want to run the application from the command line after it has been built:
+
+- **Windows (PowerShell)**: 
+  ```powershell
+  Start-Process "dist\win-unpacked\manage-user-secrets.exe"
+  ```
+- **macOS**: 
+  ```bash
+  open dist/mac/manage-user-secrets.app
+  ```
+- **Linux**: 
+  ```bash
+  ./dist/linux-unpacked/manage-user-secrets
+  ```
+
+### Stopping All Processes & Clearing Ports
+If the application crashes, leaves background processes, or locks the development ports (5173/5174), you can forcefully kill them using the following commands:
+
+- **Windows (PowerShell)**:
+  ```powershell
+  taskkill /F /IM electron.exe /T
+  taskkill /F /IM node.exe /T
+  taskkill /F /IM manage-user-secrets.exe /T
+  Get-Process -Id (Get-NetTCPConnection -LocalPort 5173, 5174 -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force
+  ```
+
+- **macOS / Linux**:
+  ```bash
+  pkill -f electron
+  pkill -f node
+  pkill -f manage-user-secrets
+  lsof -ti:5173,5174 | xargs kill -9
+  ```
