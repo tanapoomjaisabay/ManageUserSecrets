@@ -2,6 +2,7 @@ import { ipcMain } from 'electron'
 import StoreRaw from 'electron-store'
 import {
   openProjectDialog,
+  getProjectInfo,
   listSecrets,
   setSecret,
   deleteSecret,
@@ -76,6 +77,10 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle('secrets:init', (_event, projectPath: string) =>
     wrapHandler(() => initUserSecrets(projectPath))
+  )
+
+  ipcMain.handle('secrets:get-project-info', (_event, projectPath: string) =>
+    wrapHandler(() => getProjectInfo(projectPath))
   )
 
   ipcMain.handle('secrets:recent-projects', () =>

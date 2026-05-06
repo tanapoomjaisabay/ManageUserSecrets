@@ -69,19 +69,11 @@ export default function App(): React.ReactElement {
   const handleOpenRecentProject = useCallback(
     async (projectPath: string, projectName: string) => {
       try {
-        const info: ProjectInfo = {
-          projectName,
-          projectPath,
-          userSecretsId: null,
-          secretsPath: null
-        }
-        // Re-load secrets to get userSecretsId
-        const secrets = await api.listSecrets(projectPath)
-        void secrets // just verify it's reachable
+        const info = await api.getProjectInfo(projectPath)
         await api.addRecentProject(projectPath, projectName)
         setCurrentProject(info)
         await refreshRecents()
-        document.title = `${projectName} — User Secrets Manager`
+        document.title = `${info.projectName} — User Secrets Manager`
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Failed to open project'
         toast.error(msg)

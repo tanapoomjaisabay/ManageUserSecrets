@@ -35,6 +35,7 @@ export interface ElectronAPI {
   initUserSecrets: (
     projectPath: string
   ) => Promise<{ userSecretsId: string } | { error: string }>
+  getProjectInfo: (projectPath: string) => Promise<ProjectInfo | { error: string }>
   getRecentProjects: () => Promise<RecentProject[] | { error: string }>
   addRecentProject: (
     projectPath: string,

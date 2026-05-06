@@ -53,6 +53,12 @@ export const api = {
     return result as { userSecretsId: string }
   },
 
+  async getProjectInfo(projectPath: string): Promise<ProjectInfo> {
+    const result = await window.electronAPI.getProjectInfo(projectPath)
+    if (hasError(result)) throw new Error(result.error)
+    return result as ProjectInfo
+  },
+
   async getRecentProjects(): Promise<RecentProject[]> {
     const result = await window.electronAPI.getRecentProjects()
     if (hasError(result)) throw new Error(result.error)

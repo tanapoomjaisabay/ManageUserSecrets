@@ -71,6 +71,11 @@ If you want to run the application from the command line after it has been built
   ```powershell
   Start-Process "dist\win-unpacked\manage-user-secrets.exe"
   ```
+
+  **Windows (Desktop Icon)**: 
+  ```powershell
+  $ws = New-Object -ComObject WScript.Shell ; $lnk = $ws.CreateShortcut("$env:USERPROFILE\Desktop\Manage User Secrets.lnk") ; $lnk.TargetPath = "$PWD\dist\win-unpacked\manage-user-secrets.exe" ; $lnk.WorkingDirectory = "$PWD\dist\win-unpacked" ; $lnk.IconLocation = "$PWD\dist\win-unpacked\manage-user-secrets.exe,0" ; $lnk.Save() ; Write-Host "Shortcut created on Desktop"
+  ```
 - **macOS**: 
   ```bash
   open dist/mac/manage-user-secrets.app

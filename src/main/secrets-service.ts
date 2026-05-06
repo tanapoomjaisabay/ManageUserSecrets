@@ -50,6 +50,17 @@ export interface ProjectInfo {
   secretsPath: string | null
 }
 
+export async function getProjectInfo(csprojPath: string): Promise<ProjectInfo> {
+  const projectName = basename(csprojPath, '.csproj')
+  const userSecretsId = await parseUserSecretsId(csprojPath)
+  return {
+    projectName,
+    projectPath: csprojPath,
+    userSecretsId,
+    secretsPath: userSecretsId ? resolveSecretsPath(userSecretsId) : null
+  }
+}
+
 export async function openProjectDialog(): Promise<ProjectInfo | null> {
   const window = BrowserWindow.getFocusedWindow()
   const result = await dialog.showOpenDialog(window!, {
@@ -60,16 +71,7 @@ export async function openProjectDialog(): Promise<ProjectInfo | null> {
 
   if (result.canceled || result.filePaths.length === 0) return null
 
-  const csprojPath = result.filePaths[0]
-  const projectName = basename(csprojPath, '.csproj')
-  const userSecretsId = await parseUserSecretsId(csprojPath)
-
-  return {
-    projectName,
-    projectPath: csprojPath,
-    userSecretsId,
-    secretsPath: userSecretsId ? resolveSecretsPath(userSecretsId) : null
-  }
+  return getProjectInfo(result.filePaths[0])
 }
 
 // --- CRUD Operations ---

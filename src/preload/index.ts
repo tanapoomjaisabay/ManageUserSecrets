@@ -12,6 +12,8 @@ const electronAPI = {
     ipcRenderer.invoke('secrets:import-overwrite', projectPath),
   exportSecrets: (projectPath: string) => ipcRenderer.invoke('secrets:export', projectPath),
   initUserSecrets: (projectPath: string) => ipcRenderer.invoke('secrets:init', projectPath),
+  getProjectInfo: (projectPath: string) =>
+    ipcRenderer.invoke('secrets:get-project-info', projectPath),
   getRecentProjects: () => ipcRenderer.invoke('secrets:recent-projects'),
   addRecentProject: (projectPath: string, projectName: string) =>
     ipcRenderer.invoke('secrets:add-recent', { projectPath, projectName })
