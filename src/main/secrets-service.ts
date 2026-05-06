@@ -261,7 +261,7 @@ export async function initUserSecrets(
       ['user-secrets', 'init', '--project', csprojPath],
       (error, _stdout, stderr) => {
         if (error) {
-          if (error.message.includes('ENOENT')) {
+          if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
             reject(
               new Error(
                 'dotnet SDK not found. Please install .NET SDK to initialize user secrets.'
