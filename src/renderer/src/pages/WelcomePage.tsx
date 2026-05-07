@@ -48,9 +48,7 @@ export default function WelcomePage({
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 mb-6 shadow-lg shadow-indigo-500/10">
             <Shield className="w-10 h-10 text-indigo-400" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-3 tracking-tight">
-            Manage User Secrets
-          </h1>
+          <h1 className="text-3xl font-bold text-white mb-3 tracking-tight">Manage User Secrets</h1>
           <p className="text-slate-400 text-base leading-relaxed">
             View, edit, and manage your{' '}
             <code className="text-indigo-400 font-mono text-sm bg-indigo-500/10 px-1.5 py-0.5 rounded">
@@ -73,17 +71,21 @@ export default function WelcomePage({
 
         {/* Feature pills */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {['CRUD Secrets', 'Auto Backup', 'Import / Export', 'Value Masking', 'Recent Projects'].map(
-            (feat) => (
-              <Badge
-                key={feat}
-                variant="secondary"
-                className="bg-white/5 text-slate-400 border-white/10 text-xs"
-              >
-                {feat}
-              </Badge>
-            )
-          )}
+          {[
+            'CRUD Secrets',
+            'Auto Backup',
+            'Import / Export',
+            'Value Masking',
+            'Recent Projects'
+          ].map((feat) => (
+            <Badge
+              key={feat}
+              variant="secondary"
+              className="bg-white/5 text-slate-400 border-white/10 text-xs"
+            >
+              {feat}
+            </Badge>
+          ))}
         </div>
 
         {/* Recent Projects */}

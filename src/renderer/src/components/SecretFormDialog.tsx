@@ -48,10 +48,7 @@ export default function SecretFormDialog({
   const validateKey = useCallback(
     (k: string): string => {
       if (!k.trim()) return 'Key cannot be empty'
-      if (
-        mode === 'add' &&
-        existingKeys.includes(k.trim())
-      ) {
+      if (mode === 'add' && existingKeys.includes(k.trim())) {
         return `Key "${k.trim()}" already exists — saving will overwrite it`
       }
       return ''
@@ -167,7 +164,7 @@ export default function SecretFormDialog({
           <Button
             id="save-secret-btn"
             onClick={handleSave}
-            disabled={saving || (!key.trim())}
+            disabled={saving || !key.trim()}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
           >
             {saving ? 'Saving…' : 'Save'}

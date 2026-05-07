@@ -29,12 +29,8 @@ export interface ElectronAPI {
   importSecretsOverwrite: (
     projectPath: string
   ) => Promise<{ merged: number; mode: string } | null | { error: string }>
-  exportSecrets: (
-    projectPath: string
-  ) => Promise<{ filePath: string } | null | { error: string }>
-  initUserSecrets: (
-    projectPath: string
-  ) => Promise<{ userSecretsId: string } | { error: string }>
+  exportSecrets: (projectPath: string) => Promise<{ filePath: string } | null | { error: string }>
+  initUserSecrets: (projectPath: string) => Promise<{ userSecretsId: string } | { error: string }>
   getProjectInfo: (projectPath: string) => Promise<ProjectInfo | { error: string }>
   getRecentProjects: () => Promise<RecentProject[] | { error: string }>
   addRecentProject: (

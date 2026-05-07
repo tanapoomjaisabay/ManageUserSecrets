@@ -88,7 +88,7 @@ async function readSecretsFile(
   if (!existsSync(secretsPath)) return {}
 
   let content = await readFile(secretsPath, 'utf-8')
-  if (content.charCodeAt(0) === 0xFEFF) {
+  if (content.charCodeAt(0) === 0xfeff) {
     content = content.slice(1)
   }
   if (!content.trim()) return {}
@@ -154,10 +154,7 @@ export async function setSecret(
   return { success: true }
 }
 
-export async function deleteSecret(
-  csprojPath: string,
-  key: string
-): Promise<{ success: boolean }> {
+export async function deleteSecret(csprojPath: string, key: string): Promise<{ success: boolean }> {
   const userSecretsId = await parseUserSecretsId(csprojPath)
   if (!userSecretsId) throw new Error('UserSecretsId not found in .csproj')
 
@@ -235,9 +232,7 @@ export async function importSecretsOverwrite(
   return { merged: Object.keys(incoming).length, mode: 'overwrite' }
 }
 
-export async function exportSecrets(
-  csprojPath: string
-): Promise<{ filePath: string } | null> {
+export async function exportSecrets(csprojPath: string): Promise<{ filePath: string } | null> {
   const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0] ?? null
   if (!win) return null
   const secrets = await readSecretsFile(csprojPath)
@@ -256,9 +251,7 @@ export async function exportSecrets(
 
 // --- Init User Secrets ---
 
-export async function initUserSecrets(
-  csprojPath: string
-): Promise<{ userSecretsId: string }> {
+export async function initUserSecrets(csprojPath: string): Promise<{ userSecretsId: string }> {
   return new Promise((resolve, reject) => {
     execFile(
       'dotnet',
@@ -267,9 +260,7 @@ export async function initUserSecrets(
         if (error) {
           if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
             reject(
-              new Error(
-                'dotnet SDK not found. Please install .NET SDK to initialize user secrets.'
-              )
+              new Error('dotnet SDK not found. Please install .NET SDK to initialize user secrets.')
             )
           } else {
             reject(new Error(stderr || error.message))

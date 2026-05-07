@@ -30,9 +30,7 @@ function addRecentProject(projectPath: string, projectName: string): void {
   store.set('recentProjects', filtered.slice(0, 10))
 }
 
-function wrapHandler<T>(
-  fn: () => Promise<T>
-): Promise<T | { error: string }> {
+function wrapHandler<T>(fn: () => Promise<T>): Promise<T | { error: string }> {
   return fn().catch((err: Error) => ({ error: err.message }))
 }
 
