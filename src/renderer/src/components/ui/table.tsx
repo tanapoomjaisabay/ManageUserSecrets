@@ -79,7 +79,10 @@ function TableCell({ className, ...props }: React.ComponentProps<'td'>): React.R
   )
 }
 
-function TableCaption({ className, ...props }: React.ComponentProps<'caption'>): React.ReactElement {
+function TableCaption({
+  className,
+  ...props
+}: React.ComponentProps<'caption'>): React.ReactElement {
   return (
     <caption
       data-slot="table-caption"

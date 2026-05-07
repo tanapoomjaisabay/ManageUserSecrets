@@ -42,6 +42,7 @@ export default function ProjectPage({
   }, [project.projectPath])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data load on mount/project change; setState runs after await, not synchronously
     loadSecrets()
   }, [loadSecrets])
 

@@ -6,7 +6,9 @@ import { AlertDialog as AlertDialogPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
-function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>): React.ReactElement {
+function AlertDialog({
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive.Root>): React.ReactElement {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
 }
 
@@ -16,7 +18,9 @@ function AlertDialogTrigger({
   return <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
 }
 
-function AlertDialogPortal({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Portal>): React.ReactElement {
+function AlertDialogPortal({
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive.Portal>): React.ReactElement {
   return <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
 }
 
@@ -59,7 +63,10 @@ function AlertDialogContent({
   )
 }
 
-function AlertDialogHeader({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
+function AlertDialogHeader({
+  className,
+  ...props
+}: React.ComponentProps<'div'>): React.ReactElement {
   return (
     <div
       data-slot="alert-dialog-header"
@@ -72,7 +79,10 @@ function AlertDialogHeader({ className, ...props }: React.ComponentProps<'div'>)
   )
 }
 
-function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
+function AlertDialogFooter({
+  className,
+  ...props
+}: React.ComponentProps<'div'>): React.ReactElement {
   return (
     <div
       data-slot="alert-dialog-footer"
@@ -114,7 +124,10 @@ function AlertDialogDescription({
   )
 }
 
-function AlertDialogMedia({ className, ...props }: React.ComponentProps<'div'>): React.ReactElement {
+function AlertDialogMedia({
+  className,
+  ...props
+}: React.ComponentProps<'div'>): React.ReactElement {
   return (
     <div
       data-slot="alert-dialog-media"

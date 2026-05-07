@@ -31,6 +31,7 @@ export default function App(): React.ReactElement {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data load on mount; setState runs after await, not synchronously
     refreshRecents()
   }, [refreshRecents])
 

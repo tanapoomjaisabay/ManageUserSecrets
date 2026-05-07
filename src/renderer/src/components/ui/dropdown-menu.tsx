@@ -4,7 +4,9 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
 
-function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>): React.ReactElement {
+function DropdownMenu({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>): React.ReactElement {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
 }
 
@@ -40,7 +42,9 @@ function DropdownMenuContent({
   )
 }
 
-function DropdownMenuGroup({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Group>): React.ReactElement {
+function DropdownMenuGroup({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Group>): React.ReactElement {
   return <DropdownMenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
 }
 
@@ -153,7 +157,10 @@ function DropdownMenuSeparator({
   )
 }
 
-function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'span'>): React.ReactElement {
+function DropdownMenuShortcut({
+  className,
+  ...props
+}: React.ComponentProps<'span'>): React.ReactElement {
   return (
     <span
       data-slot="dropdown-menu-shortcut"
@@ -163,7 +170,9 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'spa
   )
 }
 
-function DropdownMenuSub({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>): React.ReactElement {
+function DropdownMenuSub({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>): React.ReactElement {
   return <DropdownMenuPrimitive.Sub data-slot="dropdown-menu-sub" {...props} />
 }
 

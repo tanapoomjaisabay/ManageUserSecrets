@@ -39,6 +39,7 @@ export default function SecretFormDialog({
   // Reset form when dialog opens/changes mode
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional form reset when dialog opens; no derived-state alternative without adding key prop
       setKey(editKey ?? '')
       setValue(editValue ?? '')
       setKeyError('')

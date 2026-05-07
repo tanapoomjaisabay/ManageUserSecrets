@@ -96,7 +96,9 @@ async function readSecretsFile(
   try {
     return JSON.parse(content)
   } catch (error: unknown) {
-    throw new Error(`Invalid JSON in secrets.json: ${secretsPath} - ${error instanceof Error ? error.message : String(error)}`)
+    throw new Error(
+      `Invalid JSON in secrets.json: ${secretsPath} - ${error instanceof Error ? error.message : String(error)}`
+    )
   }
 }
 

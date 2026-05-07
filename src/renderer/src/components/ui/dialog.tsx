@@ -5,19 +5,27 @@ import { Dialog as DialogPrimitive } from 'radix-ui'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
-function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>): React.ReactElement {
+function Dialog({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>): React.ReactElement {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
 
-function DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>): React.ReactElement {
+function DialogTrigger({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Trigger>): React.ReactElement {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
-function DialogPortal({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>): React.ReactElement {
+function DialogPortal({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Portal>): React.ReactElement {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 }
 
-function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>): React.ReactElement {
+function DialogClose({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Close>): React.ReactElement {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
 }
 
@@ -105,7 +113,10 @@ function DialogFooter({
   )
 }
 
-function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>): React.ReactElement {
+function DialogTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>): React.ReactElement {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
