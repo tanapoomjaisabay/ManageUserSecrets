@@ -26,6 +26,6 @@ if (process.contextIsolated) {
     console.error(error)
   }
 } else {
-  // @ts-ignore
+  // @ts-ignore -- contextIsolation disabled, exposing API directly to window
   window.electronAPI = electronAPI
 }

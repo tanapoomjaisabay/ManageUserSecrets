@@ -119,13 +119,13 @@ export default function SecretsTable({
       <div className="flex flex-col items-center justify-center py-20 text-slate-600 rounded-xl border border-dashed border-white/8">
         {search ? (
           <>
-            <p className="text-sm font-medium text-slate-500 mb-1">No results for "{search}"</p>
+            <p className="text-sm font-medium text-slate-500 mb-1">No results for &quot;{search}&quot;</p>
             <p className="text-xs text-slate-600">Try a different search term</p>
           </>
         ) : (
           <>
             <p className="text-sm font-medium text-slate-500 mb-1">No secrets yet</p>
-            <p className="text-xs text-slate-600">Click "Add Secret" to create your first one</p>
+            <p className="text-xs text-slate-600">Click &quot;Add Secret&quot; to create your first one</p>
           </>
         )}
       </div>
