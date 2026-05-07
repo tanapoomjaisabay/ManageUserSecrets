@@ -18,7 +18,7 @@ interface RecentProject {
   lastOpened: string
 }
 
-const Store = (StoreRaw as any).default || StoreRaw
+const Store = (StoreRaw as { default?: typeof StoreRaw }).default ?? StoreRaw
 const store = new Store({
   defaults: { recentProjects: [] as RecentProject[] }
 })
@@ -30,9 +30,7 @@ function addRecentProject(projectPath: string, projectName: string): void {
   store.set('recentProjects', filtered.slice(0, 10))
 }
 
-function wrapHandler<T>(
-  fn: () => Promise<T>
-): Promise<T | { error: string }> {
+function wrapHandler<T>(fn: () => Promise<T>): Promise<T | { error: string }> {
   return fn().catch((err: Error) => ({ error: err.message }))
 }
 

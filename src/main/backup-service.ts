@@ -16,9 +16,7 @@ export async function backupSecrets(secretsPath: string): Promise<void> {
   // Prune old backups — keep only the latest MAX_BACKUPS
   try {
     const files = await readdir(dir)
-    const backups = files
-      .filter((f) => f.startsWith('secrets.') && f.endsWith('.json.bak'))
-      .sort()
+    const backups = files.filter((f) => f.startsWith('secrets.') && f.endsWith('.json.bak')).sort()
 
     if (backups.length > MAX_BACKUPS) {
       const toDelete = backups.slice(0, backups.length - MAX_BACKUPS)

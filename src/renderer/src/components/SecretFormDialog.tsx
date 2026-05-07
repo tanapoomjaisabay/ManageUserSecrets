@@ -39,6 +39,7 @@ export default function SecretFormDialog({
   // Reset form when dialog opens/changes mode
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional form reset when dialog opens; no derived-state alternative without adding key prop
       setKey(editKey ?? '')
       setValue(editValue ?? '')
       setKeyError('')
@@ -48,10 +49,7 @@ export default function SecretFormDialog({
   const validateKey = useCallback(
     (k: string): string => {
       if (!k.trim()) return 'Key cannot be empty'
-      if (
-        mode === 'add' &&
-        existingKeys.includes(k.trim())
-      ) {
+      if (mode === 'add' && existingKeys.includes(k.trim())) {
         return `Key "${k.trim()}" already exists — saving will overwrite it`
       }
       return ''
@@ -167,7 +165,7 @@ export default function SecretFormDialog({
           <Button
             id="save-secret-btn"
             onClick={handleSave}
-            disabled={saving || (!key.trim())}
+            disabled={saving || !key.trim()}
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
           >
             {saving ? 'Saving…' : 'Save'}
