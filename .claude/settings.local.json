@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Select-String \"ban-ts-comment|no-unescaped\")",
+      "Bash(Select-String \"no-explicit-any\")",
+      "PowerShell(pnpm lint *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
