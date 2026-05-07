@@ -8,7 +8,17 @@
       "Bash(git commit *)",
       "Bash(git *)",
       "Bash(pnpm lint *)",
-      "Bash(Select-String \"only-export-components\")"
+      "Bash(Select-String \"only-export-components\")",
+      "Bash(npx eslint *)",
+      "Bash(Select-String \"explicit-function-return-type\")",
+      "Bash(grep -E \"^C:\\\\\\\\\\\\\\\\|explicit-function-return-type\")",
+      "Read(//tmp/**)",
+      "Bash(pnpm typecheck *)",
+      "Bash(findstr -i \"eslint\\\\|react-hooks\")",
+      "Bash(node -e \"const pkg = require\\('./node_modules/eslint-plugin-react-hooks/package.json'\\); console.log\\(pkg.version\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(findstr settings.local)",
+      "Bash(findstr /i \"settings.local\")"
     ]
   }
 }
