@@ -18,7 +18,7 @@ interface RecentProject {
   lastOpened: string
 }
 
-const Store = (StoreRaw as any).default || StoreRaw
+const Store = (StoreRaw as { default?: typeof StoreRaw }).default ?? StoreRaw
 const store = new Store({
   defaults: { recentProjects: [] as RecentProject[] }
 })
