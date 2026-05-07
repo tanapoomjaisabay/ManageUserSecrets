@@ -5,7 +5,10 @@
       "Bash(Select-String \"no-explicit-any\")",
       "PowerShell(pnpm lint *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git *)",
+      "Bash(pnpm lint *)",
+      "Bash(Select-String \"only-export-components\")"
     ]
   }
 }
